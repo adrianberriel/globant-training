@@ -1,0 +1,16 @@
+{
+  "name": "servidor",
+  "version": "0.0.1",
+  "description": "servidor",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrian Berriel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^3.4.8",
+    "js2xmlparser": "^0.1.3",
+    "xml2js": "^0.4.1"
+  }
+}

@@ -1,7 +1,6 @@
 //////////////////////////////////////////
 //Ejercicio 5 de Oro - Adrian Berriel
 //////////////////////////////////////////
-var bolilleroTradicional = [], bolilleroRevancha = [];
 
 //Retorna entero aleatorio entre min y max
 function getRandomInt(min, max) {
@@ -23,33 +22,40 @@ function sortear(bolillero) {
     return bolillero;
 }
 
-function monitor() {
+function monitor(bolilleroTradicional, bolilleroRevancha) {
     console.log('oro: ', bolilleroTradicional);
     console.log('revancha: ', bolilleroRevancha);
     console.log('---------------------------');
 }
 
-//function detener(intervalo
+function fin() {
+    console.log('FIN SORTEO!!!');
+}
 
-function iniciar() {
-    var tiempoTrad = 5000, tiempoRevancha = 8000,
-        tiempoMonitor = 2000;
-    var bolillasTrad = 6, bolillasRev = 5;
+function iniciar(bolillasTrad, bolillasRev, tiempoTrad, tiempoRevancha, tiempoMonitor) {
+    var tiempoTrad = tiempoTrad * 1000;
+    var tiempoRevancha = tiempoRevancha * 1000;
+    var tiempoMonitor = tiempoMonitor * 1000;
+    var bolilleroTradicional = [], bolilleroRevancha = [];
 
     var intervaloTrad = setInterval(sortear, tiempoTrad, bolilleroTradicional);
     var intervaloRev = setInterval(sortear, tiempoRevancha, bolilleroRevancha);
-    var intervaloMonitor = setInterval(monitor, tiempoMonitor);
+    var intervaloMonitor = setInterval(monitor, tiempoMonitor, bolilleroTradicional, bolilleroRevancha);
 
-    var totalTradicional = tiempoTrad * (bolillasTrad);
-    var totalRevancha = tiempoRevancha * (bolillasRev);
+    var totalTradicional = tiempoTrad * (bolillasTrad + 1);
+    var totalRevancha = tiempoRevancha * (bolillasRev + 1);
     //Detenemos los sorteos
     setTimeout(clearInterval, totalTradicional, intervaloTrad);
     setTimeout(clearInterval, totalRevancha, intervaloRev);
 
-    totalRevancha > totalTradicional ? 
-        setTimeout(clearInterval, totalRevancha, intervaloMonitor) : 
+    //Apagamos con el tiempo mayor
+    if (totalRevancha > totalTradicional) {
+        setTimeout(clearInterval, totalRevancha, intervaloMonitor);
+        setTimeout(fin, totalRevancha);
+    } else {
         setTimeout(clearInterval, totalTradicional, intervaloMonitor);
-
+        setTimeout(fin, totalTradicional);
+    }
 }
 
-iniciar();
+iniciar(6, 5, 5, 8, 2);
