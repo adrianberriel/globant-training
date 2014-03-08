@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<2001>
-    <nombre>Alfonso</nombre>
-    <salario>43100</salario>
-</2001>
-<2002>
-    <nombre>Fernando</nombre>
-    <salario>52000</salario>
-</2002>
+<empleados>
+	<empleado>
+		<id>2001</id>
+		<nombre>Fernando</nombre>
+		<salario>23466</salario>
+	</empleado>
+	<empleado>
+		<id>2002</id>
+		<nombre>Lucia</nombre>
+		<salario>54123</salario>
+	</empleado>
+</empleados>

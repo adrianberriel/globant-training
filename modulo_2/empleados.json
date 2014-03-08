@@ -1,10 +1,16 @@
 {
-    "2001": {
-        "nombre": "Alfonso",
-            "salario": "43100"
-    },
-        "2002": {
-            "nombre": "Fernando",
-            "salario": "52000"
-        }
+  "empleados": {
+    "empleado": [
+      {
+        "id": "3001",
+        "nombre": "Rodrigo",
+        "salario": "42111"
+      },
+      {
+        "id": "3002",
+        "nombre": "Mariana",
+        "salario": "38324"
+      }
+    ]
+  }
 }
