@@ -1,31 +1,32 @@
 //Datos de prueba
-var empleados = {
-    'empleados' : {
-        'empleado' : [
-        {
-            id: 1001,
-            nombre: 'Juan',
-            salario: 23400 
-        },
-        { 
-            id: 1002,
-            nombre: 'Pedro',
-            salario: 32200
-        },
-        { 
-            id: 1003,
-            nombre: 'Martin',
-            salario: 39430 
-        }
-        ]
-    }
-};
+var empleados = [
+{
+    id: 1001,
+    nombre: 'Juan',
+    salario: 23400 
+},
+{ 
+    id: 1002,
+    nombre: 'Pedro',
+    salario: 32200
+},
+{ 
+    id: 1003,
+    nombre: 'Martin',
+    salario: 39430 
+}
+];
 
 var express = require('express');
 var js2xmlparser = require("js2xmlparser");
 var xml2js = require('xml2js');
 
 var app = express();
+
+app.get('/', function(req, res) {
+    console.log(parsearEmpleados(req, empleados));
+    res.send(parsearEmpleados(req, empleados));
+});
 
 app.use(function(req, res, next) {
     req.rawBody = '';
@@ -38,7 +39,7 @@ app.use(function(req, res, next) {
     });
 });
 
-function rawBody2json(req) {
+function rawBodyToContentType(req) {
     var body = req.rawBody;
     var datosJson;
     var contentType = req.get('Content-type');
@@ -56,16 +57,20 @@ function rawBody2json(req) {
     return datosJson;
 }
 
-function empleadosConFormato(req, emp) {
+function parsearEmpleados(req, emp) {
     var accept = req.get('accept');
     if (accept == 'application/xml' || accept == 'text/xml') {
-        return js2xmlparser('empleados', emp);
+        var options = {
+            wrapArray: true,
+            elementName: 'Empleado'
+        }
+        return js2xmlparser('empleados', emp, options);
     }
     return emp;
 }
 
 app.put('/actualizar', function(req, res){
-    var empAct = rawBody2json(req);
+    var empAct = rawBodyToContentType(req);
     empAct = empAct['empleados']['empleado'];
     var empViejos = empleados['empleados']['empleado'];
     for (var emp in empAct) {
@@ -79,16 +84,16 @@ app.put('/actualizar', function(req, res){
             }
         }
     }
-    res.send(empleadosConFormato(req, empleados));
+    res.send(parsearEmpleados(req, empleados));
 });
 
 app.post('/crear', function(req, res){
-    var empNuevos = rawBody2json(req);
+    var empNuevos = rawBodyToContentType(req);
     empNuevos = empNuevos['empleados']['empleado'];
     var empViejos = empleados['empleados']['empleado'];
     empleados['empleados']['empleado'] = empViejos.concat(empNuevos);
 
-    res.send(empleadosConFormato(req, empleados));
+    res.send(parsearEmpleados(req, empleados));
 });
 
 app.delete('/eliminar/:id', function(req, res){
@@ -101,7 +106,7 @@ app.delete('/eliminar/:id', function(req, res){
             //empleado = listaEmpleados[emp];
             //delete empleado;
             delete empleados[listaEmpleados[emp]];
-            res.send(empleadosConFormato(req, empleados));
+            res.send(parsearEmpleados(req, empleados));
         }
     }
     res.send(406, 'Empleado no encontrado');
@@ -109,7 +114,7 @@ app.delete('/eliminar/:id', function(req, res){
 
 app.get('/empleados', function(req, res){
     var emp = empleados;
-    res.send(empleadosConFormato(req, emp));
+    res.send(parsearEmpleados(req, emp));
 });
 
 app.get('/empleado/:id', function(req, res){
@@ -120,7 +125,7 @@ app.get('/empleado/:id', function(req, res){
         var empId = listaEmpleados[emp]['id'];
         if (id == empId) {
             empleado = listaEmpleados[emp];
-            res.send(empleadosConFormato(req, empleado));
+            res.send(parsearEmpleados(req, empleado));
         }
     }
     res.send(406, 'Empleado no encontrado');
