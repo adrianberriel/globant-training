@@ -12,12 +12,13 @@ function Bolillero(cantBolillas, tiempoEntreBolillas) {
 
 function OtroBolillero() {
     Bolillero.call(this);
-    OtroBolillero.prototype = new Bolillero();
-    OtroBolillero.prototype.constructor = OtroBolillero;
+}
 
-    OtroBolillero.prototype.hola = function() {
-        console.log('soy otro bolillero');
-    }
+OtroBolillero.prototype = new Bolillero();
+OtroBolillero.prototype.constructor = OtroBolillero;
+
+OtroBolillero.prototype.hola = function() {
+    console.log('soy otro bolillero');
 }
 
 (function probar() {
