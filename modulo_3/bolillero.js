@@ -1,16 +1,20 @@
-//////////////////////////////////////////
-//Ejercicio 5 de Oro - Adrian Berriel
-//////////////////////////////////////////
 
-function Bolillero(cantBolillas, tiempoEntreBolillas) {
-    this.cantBolillas = cantBolillas;
-    this.tiempoEntreBolillas = tiempoEntreBolillas;
-    Bolillero.prototype.hola = function () {
-        console.log('bolillero comun');
-    }
+
+
+
+
+function Bolillero (totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
+    this.totalBolillas = totalBolillas;
+    this.bolillasSorteo = bolillasSorteo;
+    this.tiempoEntreBolillas = tiempoEntreBolillas * 1000;
 }
 
-function OtroBolillero() {
+Bolillero.prototype.hola = function() {
+    console.log('bolillero comun');
+    console.log(this.tiempoEntreBolillas);
+}
+
+function OtroBolillero(totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
     Bolillero.call(this);
 }
 
@@ -19,15 +23,18 @@ OtroBolillero.prototype.constructor = OtroBolillero;
 
 OtroBolillero.prototype.hola = function() {
     console.log('soy otro bolillero');
+    console.log(this.tiempoEntreBolillas);
 }
 
-(function probar() {
-    var b1 = new Bolillero(2,3);
-    var b2 = new OtroBolillero(4,5);
+function probar() {
+    var b1 = new Bolillero(44, 2, 3);
+    var b2 = new OtroBolillero(44, 4, 5);
 
     b1.hola();
     b2.hola();
-}());
+}
+
+probar();
 
 //Retorna entero aleatorio entre min y max
 function getRandomInt(min, max) {
