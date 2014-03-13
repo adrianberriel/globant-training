@@ -1,12 +1,9 @@
 
-
-
-
-
 function Bolillero (totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
     this.totalBolillas = totalBolillas;
     this.bolillasSorteo = bolillasSorteo;
     this.tiempoEntreBolillas = tiempoEntreBolillas * 1000;
+    this.bolillero = [];
 }
 
 Bolillero.prototype.hola = function() {
@@ -14,8 +11,21 @@ Bolillero.prototype.hola = function() {
     console.log(this.tiempoEntreBolillas);
 }
 
+Bolillero.prototype.sortear = function() {
+    var bolillaNoSirve = true;
+    var bolilla;
+    while (bolillaNoSirve) {
+        bolilla = Math.floor(Math.random() * this.totalBolillas + 1);
+        //Si la bolilla no esta me sirve
+        if (this.bolillero.indexOf(bolilla) === -1) {
+            this.bolillero.push(bolilla);
+            bolillaNoSirve = false;
+        }
+    }
+}
+
 function OtroBolillero(totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
-    Bolillero.call(this);
+    Bolillero.call(this, totalBolillas, bolillasSorteo, tiempoEntreBolillas);
 }
 
 OtroBolillero.prototype = new Bolillero();
@@ -30,8 +40,12 @@ function probar() {
     var b1 = new Bolillero(44, 2, 3);
     var b2 = new OtroBolillero(44, 4, 5);
 
-    b1.hola();
-    b2.hola();
+    //b1.hola();
+    //b2.hola();
+    b1.sortear();
+    b1.sortear();
+    b1.sortear();
+    console.log(b1.bolillero);
 }
 
 probar();
@@ -52,7 +66,6 @@ function sortear(bolillero) {
             bolillaNoSirve = false;
         }
     }
-    //console.log(sorteo + ': ' + bolillero);
     return bolillero;
 }
 
