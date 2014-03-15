@@ -1,108 +1,90 @@
+var moduloCincoDeOro = (function() {
+    function Bolillero (totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
+        this.totalBolillas = totalBolillas;
+        this.bolillasSorteo = bolillasSorteo;
+        this.tiempoEntreBolillas = tiempoEntreBolillas * 1000;
+        this.bolillero = [];
+    }
 
-function Bolillero (totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
-    this.totalBolillas = totalBolillas;
-    this.bolillasSorteo = bolillasSorteo;
-    this.tiempoEntreBolillas = tiempoEntreBolillas * 1000;
-    this.bolillero = [];
-}
-
-Bolillero.prototype.hola = function() {
-    console.log('bolillero comun');
-    console.log(this.tiempoEntreBolillas);
-}
-
-Bolillero.prototype.sortear = function() {
-    var bolillaNoSirve = true;
-    var bolilla;
-    while (bolillaNoSirve) {
-        bolilla = Math.floor(Math.random() * this.totalBolillas + 1);
-        //Si la bolilla no esta me sirve
-        if (this.bolillero.indexOf(bolilla) === -1) {
-            this.bolillero.push(bolilla);
-            bolillaNoSirve = false;
+    Bolillero.prototype.sortear = function() {
+        var bolillaNoSirve = true;
+        var bolilla;
+        while (bolillaNoSirve) {
+            bolilla = Math.floor(Math.random() * this.totalBolillas + 1);
+            if (this.bolillero.indexOf(bolilla) === -1) {
+                this.bolillero.push(bolilla);
+                bolillaNoSirve = false;
+            }
         }
     }
-}
 
-function OtroBolillero(totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
-    Bolillero.call(this, totalBolillas, bolillasSorteo, tiempoEntreBolillas);
-}
+    Bolillero.prototype.initSorteo = function() {
+        var self = this;//Para arreglar el contexto y no se pierda la referencia a this en la llamada a setInterval()
+        this.intervalID = setInterval(
+                function() { self.sortear(); },
+                this.tiempoEntreBolillas);
+    }
 
-OtroBolillero.prototype = new Bolillero();
-OtroBolillero.prototype.constructor = OtroBolillero;
+    Bolillero.prototype.imprimir = function() {
+        console.log('oro: ' + this.bolillero);
+    }
 
-OtroBolillero.prototype.hola = function() {
-    console.log('soy otro bolillero');
-    console.log(this.tiempoEntreBolillas);
-}
+    function BolilleroRevancha(totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
+        Bolillero.call(this, totalBolillas, bolillasSorteo, tiempoEntreBolillas);
+    }
+
+    BolilleroRevancha.prototype = new Bolillero();
+    BolilleroRevancha.prototype.constructor = BolilleroRevancha;
+
+    BolilleroRevancha.prototype.imprimir = function() {
+        console.log('revancha: ' + this.bolillero);
+    }
+
+    //Singleton pattern
+    var Monitor = (function() {
+        var instance;
+
+        function init(tiempoMonitor) {
+            var oro = new Bolillero(44, 6, 2);
+            var revancha = new BolilleroRevancha(44, 5, 3);
+            var tiempo = tiempoMonitor * 1000;
+            return {
+                iniciarMonitor: function() {
+                    oro.initSorteo();
+                    revancha.initSorteo();
+                    setInterval(function() { oro.imprimir() }, tiempo);
+                    setInterval(function() { revancha.imprimir() }, tiempo);
+                }
+            };
+        };
+
+        return {
+            getInstance: function(tiempo) {
+                if (!instance) {
+                    instance = init(tiempo);
+                }
+                return instance;
+            }
+        };
+    })();//Fin Monitor 
+
+    return {
+        monitor: Monitor
+    };
+})();
 
 function probar() {
-    var b1 = new Bolillero(44, 2, 3);
-    var b2 = new OtroBolillero(44, 4, 5);
-
-    //b1.hola();
-    //b2.hola();
-    b1.sortear();
-    b1.sortear();
-    b1.sortear();
-    console.log(b1.bolillero);
+    var monitor = moduloCincoDeOro.monitor.getInstance(2);
+    monitor.iniciarMonitor();
+    //console.log(moduloCincoDeOro(2000).tiempo);
 }
 
 probar();
 
-//Retorna entero aleatorio entre min y max
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+function pruebajquery() {
+    var jq = document.createElement('script');
+    jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
+    document.getElementsByTagName('head')[0].appendChild(jq);
+    // ... give time for script to load, then type.
+    jQuery.noConflict();
 }
-
-function sortear(bolillero) {
-    var bolillaNoSirve = true;
-    var bolilla;
-    while (bolillaNoSirve) {
-        bolilla = getRandomInt(1,44);
-        //Si la bolilla no esta me sirve
-        if (bolillero.indexOf(bolilla) === -1) {
-            bolillero.push(bolilla);
-            bolillaNoSirve = false;
-        }
-    }
-    return bolillero;
-}
-
-function monitor(bolilleroTradicional, bolilleroRevancha) {
-    console.log('oro: ', bolilleroTradicional);
-    console.log('revancha: ', bolilleroRevancha);
-    console.log('---------------------------');
-}
-
-function fin() {
-    console.log('FIN SORTEO!!!');
-}
-
-function iniciar(bolillasTrad, bolillasRev, tiempoTrad, tiempoRevancha, tiempoMonitor) {
-    var tiempoTrad = tiempoTrad * 1000;
-    var tiempoRevancha = tiempoRevancha * 1000;
-    var tiempoMonitor = tiempoMonitor * 1000;
-    var bolilleroTradicional = [], bolilleroRevancha = [];
-
-    var intervaloTrad = setInterval(sortear, tiempoTrad, bolilleroTradicional);
-    var intervaloRev = setInterval(sortear, tiempoRevancha, bolilleroRevancha);
-    var intervaloMonitor = setInterval(monitor, tiempoMonitor, bolilleroTradicional, bolilleroRevancha);
-
-    var totalTradicional = tiempoTrad * (bolillasTrad + 1);
-    var totalRevancha = tiempoRevancha * (bolillasRev + 1);
-    //Detenemos los sorteos
-    setTimeout(clearInterval, totalTradicional, intervaloTrad);
-    setTimeout(clearInterval, totalRevancha, intervaloRev);
-
-    //Apagamos con el tiempo mayor
-    if (totalRevancha > totalTradicional) {
-        setTimeout(clearInterval, totalRevancha, intervaloMonitor);
-        setTimeout(fin, totalRevancha);
-    } else {
-        setTimeout(clearInterval, totalTradicional, intervaloMonitor);
-        setTimeout(fin, totalTradicional);
-    }
-}
-
-//iniciar(6, 5, 5, 8, 2);
