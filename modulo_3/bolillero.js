@@ -1,9 +1,13 @@
 var moduloCincoDeOro = (function() {
+    ////////////////////////////////////////////////////////////////////////////////
+    //                          'Clase' Bolillero
+    ////////////////////////////////////////////////////////////////////////////////
     function Bolillero (totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
         this.totalBolillas = totalBolillas;
         this.bolillasSorteo = bolillasSorteo;
         this.tiempoEntreBolillas = tiempoEntreBolillas * 1000;
         this.bolillero = [];
+        this.finSorteo = false;
     }
 
     Bolillero.prototype.sortear = function() {
@@ -19,9 +23,17 @@ var moduloCincoDeOro = (function() {
     }
 
     Bolillero.prototype.initSorteo = function() {
-        var self = this;//Para arreglar el contexto y no se pierda la referencia a this en la llamada a setInterval()
+        //Para arreglar el contexto y no se pierda la referencia a this en la llamada a setInterval()
+        //se pasa la referencia a this a una variable local
+        var self = this;
         this.intervalID = setInterval(
-                function() { self.sortear(); },
+                function() { 
+                    self.sortear();
+                    if (self.bolillero.length === self.bolillasSorteo) {
+                        self.finSorteo = true;
+                        clearInterval(self.intervalID);
+                    }
+                },
                 this.tiempoEntreBolillas);
     }
 
@@ -29,6 +41,10 @@ var moduloCincoDeOro = (function() {
         console.log('oro: ' + this.bolillero);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //                          'Clase' BolilleroRevancha
+    ////////////////////////////////////////////////////////////////////////////////
+    //Hereda de Bolillwro
     function BolilleroRevancha(totalBolillas, bolillasSorteo, tiempoEntreBolillas) {
         Bolillero.call(this, totalBolillas, bolillasSorteo, tiempoEntreBolillas);
     }
@@ -40,6 +56,9 @@ var moduloCincoDeOro = (function() {
         console.log('revancha: ' + this.bolillero);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //                          'Clase' Monitor
+    ////////////////////////////////////////////////////////////////////////////////
     //Singleton pattern
     var Monitor = (function() {
         var instance;
@@ -52,8 +71,17 @@ var moduloCincoDeOro = (function() {
                 iniciarMonitor: function() {
                     oro.initSorteo();
                     revancha.initSorteo();
-                    setInterval(function() { oro.imprimir() }, tiempo);
-                    setInterval(function() { revancha.imprimir() }, tiempo);
+                    var intervalIDMonitor = setInterval(
+                        function() {
+                            oro.imprimir();
+                            revancha.imprimir();
+                            console.log('--------------------------');
+                            if (oro.finSorteo && revancha.finSorteo) {
+                                console.log('FIN SORTEO!!!!');
+                                clearInterval(intervalIDMonitor);
+                            }
+                        },
+                        tiempo);
                 }
             };
         };
@@ -71,20 +99,18 @@ var moduloCincoDeOro = (function() {
     return {
         monitor: Monitor
     };
-})();
+})();//Fin modulo moduloCincoDeOro
 
-function probar() {
+(function () {
+    //Se inicia el monitor con frecuencia de 2 segundos
     var monitor = moduloCincoDeOro.monitor.getInstance(2);
     monitor.iniciarMonitor();
-    //console.log(moduloCincoDeOro(2000).tiempo);
-}
+})();
 
-probar();
-
-function pruebajquery() {
-    var jq = document.createElement('script');
-    jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
-    document.getElementsByTagName('head')[0].appendChild(jq);
-    // ... give time for script to load, then type.
-    jQuery.noConflict();
-}
+//function incluirJQuery() {
+    //var jq = document.createElement('script');
+    //jq.src = "//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js";
+    //document.getElementsByTagName('head')[0].appendChild(jq);
+    //// ... give time for script to load, then type.
+    //jQuery.noConflict();
+//}
