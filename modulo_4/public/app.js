@@ -1,0 +1,1 @@
+var myAppModule = angular.module('CEPExample',['CEPExample.controllers','CEPExample.services']);
