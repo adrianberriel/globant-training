@@ -171,6 +171,8 @@ app.put('/employees/:id', function (req, res) {
 	employee.name = body.name;
 	employee.salary = body.salary;
 
+    //borrar
+    console.log(employee.name);
 	res.send("Employee updated correctly", 200);
 });
 

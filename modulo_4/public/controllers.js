@@ -1,9 +1,26 @@
-var controllers = angular.module('CEPExample.controllers',[],function(){});
-controllers.controller('EmpleadosController',function($scope, EmpleadosService){
-	/*$scope.empleados = [
-		{ id: 1, name: 'juanjo', salary: 1000 },
-		{ id: 2, name: 'pepe', salary: 2000 },
-		{ id: 3, name: 'lito', salary: 3000 }
-	];*/
-	$scope.empleados = EmpleadosService.getEmpleadosList();
+//var controllers = angular.module('CEPExample.controllers',[],function(){});
+var controllers = angular.module('CEPExample.controllers',[]);
+
+controllers.controller('ListController', function($scope, ListService){
+    $scope.empleados = ListService.getEmpleadosList();
+});
+
+controllers.controller('EmployeeController', function($scope, EmpleadoService, $routeParams){
+    $scope.empleado = EmpleadoService.getEmpleado($routeParams.employeeId);
+    //$scope.updateEmpleado = function() {
+        //alert($scope.empleado.name);
+        ////var e = angular.copy($scope.empleado);
+        //EmpleadoService.updateEmpleado();
+    //};
+    $scope.updateEmpleado = EmpleadoService.updateEmpleado();
+});
+
+//controllers.controller('EditEmployeeController', function($scope, EmpleadoService){
+    //alert('controller EditEmployeeController');
+    //alert($scope.empleado);
+    //$scope.update = EmpleadoService.updateEmpleado(empleado);
+//});
+
+controllers.controller('PruebaController', function($scope){
+    $scope.message = 'hola';
 });

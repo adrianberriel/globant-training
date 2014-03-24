@@ -1,23 +1,12 @@
 <html ng-app="CEPExample">
-<head>
-    <title>AngularJS Example - CEP</title>
-    <script type="text/javascript"
-        src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-	<script type="text/javascript" src="app.js"></script>
-	<script type="text/javascript" src="controllers.js"></script>
-	<script type="text/javascript" src="services.js"></script>
-</head>
-<body>
-	<div ng-controller="EmpleadosController">
-		Empleados!
-		<table>
-			<tr>
-				<th>id</th><th>Nombre</th><th>Salario</th>
-			</tr>
-			<tr ng-repeat="empleado in empleados">
-				<td>{{empleado.id}}</td><td>{{empleado.name}}</td><td>{{empleado.salary}}</td>
-			</tr>
-		</table>
-	</div>
-</body>
+    <head>
+        <title>AngularJS Example - CEP</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+        <script type="text/javascript" src="controllers.js"></script>
+        <script type="text/javascript" src="services.js"></script>
+    </head>
+    <body>
+        <div ng-view></div>
+    </body>
 </html>
