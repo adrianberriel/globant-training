@@ -25,6 +25,7 @@ var nextEmployeeId = 4;
 // GET /employees
 // Returns all employees
 app.get('/employees', function (req, res) {
+    console.log('llamando al get');//borrar
 	if(req.accepts('*/*')){
 		res.send('You have to specify what you accept from the server', 400);
 	}
@@ -141,7 +142,7 @@ app.post('/employees', function (req, res) {
 // PUT /employees/:id
 // Updates an employee by its id. As we are delegating ids ownership to the server, we can only create using post, so we won't create using PUT in this case.
 app.put('/employees/:id', function (req, res) {
-
+    console.log('llamando al put');//borrar
 	var body = parseBodyDependingOnContentType(req, res);
 	
 	if(body === null) {
@@ -171,8 +172,6 @@ app.put('/employees/:id', function (req, res) {
 	employee.name = body.name;
 	employee.salary = body.salary;
 
-    //borrar
-    console.log(employee.name);
 	res.send("Employee updated correctly", 200);
 });
 

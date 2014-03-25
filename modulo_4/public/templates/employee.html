@@ -1,0 +1,10 @@
+<form>
+    <label>Id</label>
+    <input type="number" name="id" ng-model="employee.id" readonly/>
+    <label>Nombre</label>
+    <input type="text" name="name" ng-model="employee.name"/>
+    <label>Salario</label>
+    <input type="number" name="salary" ng-model="employee.salary"/>
+    <br/>
+    <input type="button" value="Update" ng-click="updateEmployee()" />
+</form>
