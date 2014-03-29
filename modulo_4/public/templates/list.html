@@ -2,10 +2,10 @@
     <tr>
         <th>Id</th><th>Nombre</th><th>Salario</th>
     </tr>
-    <tr ng-repeat="employee in employees">
-        <td>{{employee.id}}</td>
-        <td>{{employee.name}}</td>
-        <td>{{employee.salary}}</td>
-        <td><a href="#edit/{{employee.id}}">Editar</a></td>
+    <tr ng-repeat="e in employees">
+        <td>{{e.id}}</td>
+        <td>{{e.name}}</td>
+        <td>{{e.salary}}</td>
+        <td><a href="#edit/{{e.id}}">Editar</a></td>
     </tr>
 </table>
